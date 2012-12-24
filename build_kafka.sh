@@ -47,7 +47,7 @@ fpm -t deb \
     -a ${arch} \
     --category ${section} \
     --vendor "" \
-    --license "${license}"
+    --license "${license}" \
     -m "${USER}@localhost" \
     --prefix=/ \
     -s dir \
