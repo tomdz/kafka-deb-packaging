@@ -8,10 +8,11 @@ url="https://kafka.apache.org/"
 arch="all"
 section="misc"
 license="Apache Software License 2.0"
-package_version="-1"
+package_version="-6"
 src_package="kafka-${version}-src.tgz"
 download_url="http://mirrors.sonic.net/apache/incubator/kafka/kafka-${version}/${src_package}"
 origdir="$(pwd)"
+license="Apache Software License 2.0"
 
 #_ MAIN _#
 rm -rf ${name}*.deb
@@ -36,7 +37,9 @@ tar zxf ${origdir}/${src_package}
 cd kafka-${version}-src
 ./sbt update
 ./sbt package
-mv config/log4j.properties config/server.properties ../build/etc/kafka
+cp -rp config/* ../build/etc/kafka
+mv config config.old
+cp ${origdir}/log4j.properties ../build/etc/kafka
 mv * ../build/usr/lib/kafka
 cd ../build
 
@@ -49,8 +52,12 @@ fpm -t deb \
     --category ${section} \
     --vendor "" \
     --license "${license}" \
-    --after-install ./kafka-broker.postinst
-    -m "${USER}@localhost" \
+    --after-install ./kafka-broker.postinst \
+    -m "${USER}@${hostname}" \
+    --config-file /etc/default/kafka-broker \
+    --config-file /etc/init/kafka-broker.conf \
+    --license "${license}" \
+    --url "https://kafka.apache.org/" \
     --prefix=/ \
     -s dir \
     -- .

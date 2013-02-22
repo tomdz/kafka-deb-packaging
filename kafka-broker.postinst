@@ -1,12 +1,18 @@
 #!/bin/sh
 
 set -e
-if ! getent passwd | grep -q kafka; then
-   useradd -r -M -d /var/run/kafka --shell /bin/false -K UID_MIN=1 -K UID_MAX=499 -g kafka kafka
-fi
 
 if ! getent group | grep -q kafka; then
-    groupadd -f -K GID_MIN=1 -K GID_MAX=999 storm
+    groupadd -f kafka
 fi
 
+if ! getent passwd | grep -q kafka; then
+   useradd -r -d /var/run/kafka --shell /bin/false -g kafka kafka
+fi
+
+if [ ! -e "/usr/lib/kafka/config" ]; then
+    ln -s /etc/kafka /usr/lib/kafka/config
+fi
+
+mkdir -p /var/run/kafka
 chown -R kafka:kafka /var/run/kafka
