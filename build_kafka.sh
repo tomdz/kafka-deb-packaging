@@ -58,6 +58,7 @@ fpm -t deb \
     --config-file /etc/init/kafka-broker.conf \
     --license "${license}" \
     --url "https://kafka.apache.org/" \
+    -m "${USER}@localhost" \
     --prefix=/ \
     -s dir \
     -- .

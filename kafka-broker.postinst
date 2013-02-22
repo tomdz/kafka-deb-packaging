@@ -3,16 +3,23 @@
 set -e
 
 if ! getent group | grep -q kafka; then
+<<<<<<< HEAD
     groupadd -f kafka
+=======
+    groupadd -f -K GID_MIN=1 -K GID_MAX=999 kafka
+>>>>>>> 30a4ab7d8554dec507b57c1b35729a8d01425479
 fi
 
 if ! getent passwd | grep -q kafka; then
    useradd -r -d /var/run/kafka --shell /bin/false -g kafka kafka
 fi
 
+<<<<<<< HEAD
 if [ ! -e "/usr/lib/kafka/config" ]; then
     ln -s /etc/kafka /usr/lib/kafka/config
 fi
 
+=======
+>>>>>>> 30a4ab7d8554dec507b57c1b35729a8d01425479
 mkdir -p /var/run/kafka
 chown -R kafka:kafka /var/run/kafka
