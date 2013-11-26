@@ -42,7 +42,7 @@ function build() {
     tar zxf ${origdir}/${src_package}
     cd kafka-${version}-src
     ./sbt update
-    ./sbt package
+    ./sbt assembly-package-dependency
     cp -rp config/* ../build/etc/kafka
     mv config config.old
     cp ${origdir}/log4j.properties ../build/etc/kafka
