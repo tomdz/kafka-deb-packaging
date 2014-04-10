@@ -2,15 +2,16 @@
 set -e
 set -u
 name=kafka
-version=0.7.2-incubating
+version="0.8.1"
+scala_version="2.10"
 description="Apache Kafka is a distributed publish-subscribe messaging system."
 url="https://kafka.apache.org/"
 arch="all"
 section="misc"
 license="Apache Software License 2.0"
 package_version="-1"
-src_package="kafka-${version}-src.tgz"
-download_url="https://dist.apache.org/repos/dist/release/kafka/${src_package}"
+src_package="kafka_${scala_version}-${version}.tgz"
+download_url="https://dist.apache.org/repos/dist/release/kafka/${version}/${src_package}"
 origdir="$(pwd)"
 license="Apache Software License 2.0"
 
@@ -37,12 +38,9 @@ function bootstrap() {
 function build() {
     cp ${origdir}/kafka-broker.default build/etc/default/kafka-broker
     cp ${origdir}/kafka-broker.upstart.conf build/etc/init/kafka-broker.conf 
-    cp ${origdir}/kafka-broker.postinst build/kafka-broker.postinst
 
     tar zxf ${origdir}/${src_package}
-    cd kafka-${version}-src
-    ./sbt update
-    ./sbt assembly-package-dependency
+    cd kafka_${scala_version}-${version}
     cp -rp config/* ../build/etc/kafka
     mv config config.old
     cp ${origdir}/log4j.properties ../build/etc/kafka
@@ -51,7 +49,7 @@ function build() {
 }
 
 function mkdeb() {
-  fpm -t deb \
+  /data/jenkins/.rbenv/shims/fpm -t deb \
     -n ${name} \
     -v ${version}${package_version} \
     --description "${description}" \
@@ -60,12 +58,11 @@ function mkdeb() {
     --category ${section} \
     --vendor "" \
     --license "${license}" \
-    --after-install ./kafka-broker.postinst \
+    --after-install ../../../kafka-broker.postinst \
     -m "${USER}@${HOSTNAME}" \
     --config-files /etc/default/kafka-broker \
     --config-files /etc/init/kafka-broker.conf \
     --license "${license}" \
-    --url "https://kafka.apache.org/" \
     --prefix=/ \
     -s dir \
     -- .
