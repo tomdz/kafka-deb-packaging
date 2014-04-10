@@ -2,44 +2,54 @@
 set -e
 set -u
 name=kafka
-version=0.7.2-incubating
+version="0.8.1"
+scala_version="2.10"
 description="Apache Kafka is a distributed publish-subscribe messaging system."
 url="https://kafka.apache.org/"
 arch="all"
 section="misc"
 license="Apache Software License 2.0"
 package_version="-1"
-src_package="kafka-${version}-src.tgz"
-download_url="http://mirrors.sonic.net/apache/incubator/kafka/kafka-${version}/${src_package}"
+src_package="kafka_${scala_version}-${version}.tgz"
+download_url="https://dist.apache.org/repos/dist/release/kafka/${version}/${src_package}"
 origdir="$(pwd)"
+license="Apache Software License 2.0"
 
 #_ MAIN _#
-rm -rf ${name}*.deb
-if [[ ! -f "${src_package}" ]]; then
-  wget ${download_url}
-fi
-mkdir -p tmp && pushd tmp
-rm -rf kafka
-mkdir -p kafka
-cd kafka
-mkdir -p build/usr/lib/kafka
-mkdir -p build/etc/default
-mkdir -p build/etc/init
-mkdir -p build/etc/kafka
-mkdir -p build/var/log/kafka
+function cleanup() {
+    rm -rf ${name}*.deb
+}
 
-cp ${origdir}/kafka-broker.default build/etc/default/kafka-broker
-cp ${origdir}/kafka-broker.upstart.conf build/etc/init/kafka-broker.conf
+function bootstrap() {
+    if [[ ! -f "${src_package}" ]]; then
+        wget ${download_url}
+    fi
+    mkdir -p tmp && pushd tmp
+    rm -rf kafka
+    mkdir -p kafka
+    cd kafka
+    mkdir -p build/usr/lib/kafka
+    mkdir -p build/etc/default
+    mkdir -p build/etc/init
+    mkdir -p build/etc/kafka
+    mkdir -p build/var/log/kafka
+}
 
-tar zxf ${origdir}/${src_package}
-cd kafka-${version}-src
-./sbt update
-./sbt package
-mv config/log4j.properties config/server.properties ../build/etc/kafka
-mv * ../build/usr/lib/kafka
-cd ../build
+function build() {
+    cp ${origdir}/kafka-broker.default build/etc/default/kafka-broker
+    cp ${origdir}/kafka-broker.upstart.conf build/etc/init/kafka-broker.conf 
 
-fpm -t deb \
+    tar zxf ${origdir}/${src_package}
+    cd kafka_${scala_version}-${version}
+    cp -rp config/* ../build/etc/kafka
+    mv config config.old
+    cp ${origdir}/log4j.properties ../build/etc/kafka
+    mv * ../build/usr/lib/kafka
+    cd ../build
+}
+
+function mkdeb() {
+  /data/jenkins/.rbenv/shims/fpm -t deb \
     -n ${name} \
     -v ${version}${package_version} \
     --description "${description}" \
@@ -48,9 +58,23 @@ fpm -t deb \
     --category ${section} \
     --vendor "" \
     --license "${license}" \
-    -m "${USER}@localhost" \
+    --after-install ../../../kafka-broker.postinst \
+    -m "${USER}@${HOSTNAME}" \
+    --config-files /etc/default/kafka-broker \
+    --config-files /etc/init/kafka-broker.conf \
+    --license "${license}" \
     --prefix=/ \
     -s dir \
     -- .
-mv kafka*.deb ${origdir}
-popd
+  mv kafka*.deb ${origdir}
+  popd
+}
+
+function main() {
+    cleanup
+    bootstrap
+    build
+    mkdeb
+}
+
+main
