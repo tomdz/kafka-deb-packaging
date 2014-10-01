@@ -1,0 +1,33 @@
+# Ubuntu upstart file at /etc/init/kafka-broker.conf
+
+description "Kafka Broker"
+
+limit nofile 32768 32768
+
+console log
+
+start on runlevel [2345]
+stop on [!12345]
+
+respawn
+respawn limit 2 5
+
+env CONFIG_HOME=/etc/kafka
+env KAFKA_HOME=/usr/lib/kafka
+umask 007
+
+kill timeout 300
+
+script
+  . /etc/default/kafka-broker
+
+  if [ "x$GC_LOG_ENABLE" = "xyes" ]; then
+    KAFKA_GC_LOG_OPTS="-Xloggc:/var/log/kafka/kafka-gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps"
+  fi
+
+  if [ "x$ENABLE" = "xyes" ]; then
+    exec ${JAVA_HOME:-/usr}/bin/java $KAFKA_HEAP_OPTS $KAFKA_JVM_PERFORMANCE_OPTS $KAFKA_GC_LOG_OPTS $KAFKA_LOG4J_OPTS $KAFKA_EXTRA_OPTS -cp '/usr/lib/kafka/libs/*' kafka.Kafka $CONFIG_HOME/server.properties
+  else
+    echo "Kafka is disabled via /etc/default/kafka-broker"
+  fi
+end script
