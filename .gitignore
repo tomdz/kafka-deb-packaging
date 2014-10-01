@@ -1,4 +1,9 @@
+# Build artifacts
 tmp
 *.deb
 *.tgz
 *.tar.gz
+DEBIAN/
+
+# Skip emacs backups
+*~
