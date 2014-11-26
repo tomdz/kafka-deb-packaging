@@ -26,7 +26,7 @@ script
   fi
 
   if [ "x$ENABLE" = "xyes" ]; then
-    exec ${JAVA_HOME:-/usr}/bin/java $KAFKA_HEAP_OPTS $KAFKA_JVM_PERFORMANCE_OPTS $KAFKA_GC_LOG_OPTS $KAFKA_LOG4J_OPTS $KAFKA_EXTRA_OPTS -cp '/usr/lib/kafka/libs/*' kafka.Kafka $CONFIG_HOME/server.properties
+    exec ${JAVA_HOME:-/usr}/bin/java $KAFKA_HEAP_OPTS $KAFKA_JVM_PERFORMANCE_OPTS $KAFKA_GC_LOG_OPTS $KAFKA_LOG4J_OPTS $KAFKA_JMX_OPTS $KAFKA_EXTRA_OPTS -cp '/usr/lib/kafka/libs/*' kafka.Kafka $CONFIG_HOME/server.properties
   else
     echo "Kafka is disabled via /etc/default/kafka-broker"
   fi
