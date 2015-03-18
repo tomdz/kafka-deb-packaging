@@ -44,7 +44,7 @@ cd kafka-${version}-src
 ./gradlew -PscalaVersion=${scalaVersion} jar
 cp -v ${origdir}/artifacts/log4j.properties config/server.properties ../build/etc/kafka/
 cp -v bin/kafka*.sh ../build/usr/lib/kafka/bin/
-cp -v core/build/libs/* core/build/dependant-libs-${scalaVersion}/* ../build/usr/lib/kafka/libs/
+cp -v clients/build/libs/* core/build/libs/* core/build/dependant-libs-${scalaVersion}/* ../build/usr/lib/kafka/libs/
 
 cd ../build
 
