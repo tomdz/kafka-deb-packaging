@@ -12,7 +12,7 @@ url="https://kafka.apache.org/"
 arch="all"
 section="misc"
 license="Apache Software License 2.0"
-package_version="-2"
+package_version="-5"
 bin_package="kafka_${scala_version}-${version}.tgz"
 src_package="kafka-${version}-src.tgz"
 src_download_url="http://mirror.sdunix.com/apache/kafka/${version}/${src_package}"
@@ -28,6 +28,7 @@ rm -rf kafka
 mkdir -p kafka
 cd kafka
 mkdir -p build/usr/lib/kafka
+mkdir -p build/usr/lib/kafka/logs
 mkdir -p build/etc/default
 mkdir -p build/etc/init
 mkdir -p build/etc/init.d

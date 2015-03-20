@@ -22,10 +22,10 @@ PATH=$PATH
 #DESC="Apache Kafka queue"
 NAME=kafka
 DAEMON=/usr/lib/kafka/bin/kafka-server-start.sh
-PIDFILE=/var/run/kafka-server.pid
+PIDFILE=/var/run/kafka/kafka-server.pid
 USER=app
 CONFIG=/etc/kafka/server.properties
-LOG=/var/log/kafka-server.log
+LOG=/var/log/kafka/kafka-server.log
 
 
 # Load the VERBOSE setting and other rcS variables
