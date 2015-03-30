@@ -4,6 +4,7 @@
 
 set -e
 set -u
+app_user=app
 name=kafka
 version=0.8.2.1
 scala_version=2.10
@@ -49,6 +50,7 @@ mv * ../build/usr/lib/kafka
 cd ../build
 
 fpm -t deb \
+    --deb-user ${app_user} \
     -n ${name} \
     -v ${version}${package_version} \
     --description "${description}" \
