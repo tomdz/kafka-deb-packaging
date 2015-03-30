@@ -12,7 +12,7 @@ url="https://kafka.apache.org/"
 arch="all"
 section="misc"
 license="Apache Software License 2.0"
-package_version="-5"
+package_version="-7"
 bin_package="kafka_${scala_version}-${version}.tgz"
 src_package="kafka-${version}-src.tgz"
 src_download_url="http://mirror.sdunix.com/apache/kafka/${version}/${src_package}"
@@ -34,7 +34,7 @@ mkdir -p build/etc/init
 mkdir -p build/etc/init.d
 mkdir -p build/etc/kafka
 mkdir -p build/var/log/kafka
-mkdir -p build/var/run/kafka
+#mkdir -p build/var/run/kafka
 
 cp ${origdir}/kafka-broker.default build/etc/default/kafka-broker
 cp ${origdir}/kafka-broker.upstart.conf build/etc/init/kafka-broker.conf

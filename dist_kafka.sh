@@ -7,7 +7,7 @@ set -u
 name=kafka
 version=0.8.2.1
 scala_version=2.10
-package_version="-5"
+package_version="-7"
 description="Apache Kafka is a distributed publish-subscribe messaging system."
 url="https://kafka.apache.org/"
 arch="all"
@@ -33,7 +33,7 @@ mkdir -p build/etc/init
 mkdir -p build/etc/init.d
 mkdir -p build/etc/kafka
 mkdir -p build/var/log/kafka
-mkdir -p build/var/run/kafka
+#mkdir -p build/var/run/kafka
 
 cp ${origdir}/kafka-broker.default build/etc/default/kafka-broker
 cp ${origdir}/kafka-broker.upstart.conf build/etc/init/kafka-broker.conf
