@@ -1,11 +1,40 @@
 kafka-deb-packaging
 ===================
 
-Simple debian packaging for Apache Kafka
+Simple debian packaging for Apache Kafka and Zookeeper.
 
-## Changelog
+### Changelog
 2015-Mar-18 : Updated for latest Kafka 0.8.2.1 and use sbt in system path.
-2015-Mar-30 : Final Test, ready for git pull
+2015-Mar-30 : Final Test, ready for git pull, packaged Zookeeper init.d!
+
+# Usage
+
+$ ./dist_kakfa.sh
+
+# Installation
+
+$ dpkg -i kafka_0.8.2.1-10_all.deb
+
+or
+
+$ apt-get install kafka
+
+Note: Installs and runs as user 'app'. Easy to change for your needs.
+
+## Post install
+
+$ sudo update-rc.d zookeeper defaults 20
+
+$ sudo update-rc.d kafka defaults 25
+
+ Adding system startup for /etc/init.d/kafka ...
+   /etc/rc0.d/K25kafka -> ../init.d/kafka
+   /etc/rc1.d/K25kafka -> ../init.d/kafka
+   /etc/rc6.d/K25kafka -> ../init.d/kafka
+   /etc/rc2.d/S25kafka -> ../init.d/kafka
+   /etc/rc3.d/S25kafka -> ../init.d/kafka
+   /etc/rc4.d/S25kafka -> ../init.d/kafka
+   /etc/rc5.d/S25kafka -> ../init.d/kafka
 
 # Tested Systems
 

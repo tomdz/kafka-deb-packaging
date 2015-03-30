@@ -8,7 +8,7 @@ app_user=app
 name=kafka
 version=0.8.2.1
 scala_version=2.10
-package_version="-7"
+package_version="-10"
 description="Apache Kafka is a distributed publish-subscribe messaging system."
 url="https://kafka.apache.org/"
 arch="all"
@@ -39,6 +39,7 @@ mkdir -p build/var/log/kafka
 cp ${origdir}/kafka-broker.default build/etc/default/kafka-broker
 cp ${origdir}/kafka-broker.upstart.conf build/etc/init/kafka-broker.conf
 cp ${origdir}/kafka-broker.init.d build/etc/init.d/kafka
+cp ${origdir}/zookeeper.init.d build/etc/init.d/zookeeper
 
 # Updated to use the Binary package
 rm -rf kafka_${scala_version}-${version}
@@ -46,6 +47,7 @@ tar zxf ${origdir}/${bin_package}
 cd kafka_${scala_version}-${version}
 # mv config/log4j.properties config/server.properties ../build/etc/kafka
 cp config/server.properties ../build/etc/kafka
+cp config/zookeeper.properties ../build/etc/kafka/zookeeper.properties
 mv * ../build/usr/lib/kafka
 cd ../build
 

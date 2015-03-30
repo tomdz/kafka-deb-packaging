@@ -12,7 +12,7 @@ url="https://kafka.apache.org/"
 arch="all"
 section="misc"
 license="Apache Software License 2.0"
-package_version="-7"
+package_version="-10"
 bin_package="kafka_${scala_version}-${version}.tgz"
 src_package="kafka-${version}-src.tgz"
 src_download_url="http://mirror.sdunix.com/apache/kafka/${version}/${src_package}"
@@ -39,6 +39,7 @@ mkdir -p build/var/log/kafka
 cp ${origdir}/kafka-broker.default build/etc/default/kafka-broker
 cp ${origdir}/kafka-broker.upstart.conf build/etc/init/kafka-broker.conf
 cp ${origdir}/kafka-broker.init.d build/etc/init.d/kafka
+cp ${origdir}/zookeeper.init.d build/etc/init.d/zookeeper
 
 # This code line uses the src packages
 tar zxf ${origdir}/${src_package}
@@ -55,6 +56,7 @@ rm -rf kafka_${scala_version}-${version}
 tar zxf ${origdir}/${bin_package}
 cd kafka_${scala_version}-${version}
 cp config/server.properties ../build/etc/kafka
+cp config/zookeeper.properties ../build/etc/kakfa/zookeeper.properties
 mv * ../build/usr/lib/kafka
 cd ../build
 
