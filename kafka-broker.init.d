@@ -11,18 +11,20 @@
 
 # Authors:            Josh Skidmore <josh@josh.sc>
 #                     Brandon Brown <brandon@bbrownsound.com>
+#                     Brandon Froehlich <brandon@froeh.org>
 #                     Taylor Brockman <taylor.brockman@gmail.com>
 
 # Revision History:   2015-02-12 - Initial commit
 # 	         2015-03-06 - Porting to nop-bigress
 #                2015-03-20 - Contribution to tomdz/kafka-deb-packaging
+#                2015-03-30 - Changed PID directory after running in AWS prod
 
 # Variables
 PATH=$PATH
-#DESC="Apache Kafka queue"
+DESC="Apache Kafka Broker"
 NAME=kafka
 DAEMON=/usr/lib/kafka/bin/kafka-server-start.sh
-PIDFILE=/var/run/kafka/kafka-server.pid
+PIDFILE=/var/run/kafka-server.pid
 USER=app
 CONFIG=/etc/kafka/server.properties
 LOG=/var/log/kafka/kafka-server.log
