@@ -1,0 +1,92 @@
+diff --git a/bin/kafka-run-class.sh b/bin/kafka-run-class.sh
+index 22a9865..e728aec 100755
+--- a/bin/kafka-run-class.sh
++++ b/bin/kafka-run-class.sh
+@@ -24,7 +24,7 @@ base_dir=$(dirname $0)/..
+ 
+ # create logs directory
+ if [ "x$LOG_DIR" = "x" ]; then
+-    LOG_DIR="$base_dir/logs"
++    LOG_DIR="/var/log/kafka"
+ fi
+ 
+ if [ ! -d "$LOG_DIR" ]; then
+@@ -39,43 +39,12 @@ if [ -z "$SCALA_BINARY_VERSION" ]; then
+ 	SCALA_BINARY_VERSION=2.10
+ fi
+ 
+-# run ./gradlew copyDependantLibs to get all dependant jars in a local dir
+-for file in $base_dir/core/build/dependant-libs-${SCALA_VERSION}*/*.jar;
+-do
+-  CLASSPATH=$CLASSPATH:$file
+-done
+-
+-for file in $base_dir/examples/build/libs//kafka-examples*.jar;
+-do
+-  CLASSPATH=$CLASSPATH:$file
+-done
+-
+-for file in $base_dir/contrib/hadoop-consumer/build/libs//kafka-hadoop-consumer*.jar;
+-do
+-  CLASSPATH=$CLASSPATH:$file
+-done
+-
+-for file in $base_dir/contrib/hadoop-producer/build/libs//kafka-hadoop-producer*.jar;
+-do
+-  CLASSPATH=$CLASSPATH:$file
+-done
+-
+-for file in $base_dir/clients/build/libs/kafka-clients*.jar;
+-do
+-  CLASSPATH=$CLASSPATH:$file
+-done
+-
+ # classpath addition for release
+ for file in $base_dir/libs/*.jar;
+ do
+   CLASSPATH=$CLASSPATH:$file
+ done
+ 
+-for file in $base_dir/core/build/libs/kafka_${SCALA_BINARY_VERSION}*.jar;
+-do
+-  CLASSPATH=$CLASSPATH:$file
+-done
+-
+ # JMX settings
+ if [ -z "$KAFKA_JMX_OPTS" ]; then
+   KAFKA_JMX_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false "
+@@ -88,7 +57,7 @@ fi
+ 
+ # Log4j settings
+ if [ -z "$KAFKA_LOG4J_OPTS" ]; then
+-  KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$base_dir/config/tools-log4j.properties"
++  KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:/etc/kafka/tools-log4j.properties"
+ fi
+ 
+ KAFKA_LOG4J_OPTS="-Dkafka.logs.dir=$LOG_DIR $KAFKA_LOG4J_OPTS"
+diff --git a/bin/kafka-server-start.sh b/bin/kafka-server-start.sh
+index 1737d0c..dc1b0c0 100755
+--- a/bin/kafka-server-start.sh
++++ b/bin/kafka-server-start.sh
+@@ -22,7 +22,7 @@ fi
+ base_dir=$(dirname $0)
+ 
+ if [ "x$KAFKA_LOG4J_OPTS" = "x" ]; then
+-    export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$base_dir/../config/log4j.properties"
++    export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:/etc/kafka/log4j.properties"
+ fi
+ 
+ if [ "x$KAFKA_HEAP_OPTS" = "x" ]; then
+diff --git a/bin/zookeeper-server-start.sh b/bin/zookeeper-server-start.sh
+index d968786..c02b760 100755
+--- a/bin/zookeeper-server-start.sh
++++ b/bin/zookeeper-server-start.sh
+@@ -22,7 +22,7 @@ fi
+ base_dir=$(dirname $0)
+ 
+ if [ "x$KAFKA_LOG4J_OPTS" = "x" ]; then
+-    export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$base_dir/../config/log4j.properties"
++    export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:/etc/kafka/log4j.properties"
+ fi
+ 
+ if [ "x$KAFKA_HEAP_OPTS" = "x" ]; then
