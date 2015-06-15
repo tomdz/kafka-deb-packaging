@@ -1,6 +1,9 @@
 #!/bin/bash
 sudo apt-get install ruby-dev build-essential
-sudo gem install fpm
+# Install fpm, either
+# sudo gem install fpm
+# or
+# gem install --user-install fpm and configure PATH accordingly, see `gem env`
 
 set -e
 set -u
