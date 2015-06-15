@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo apt-get install ruby-dev build-essential
+sudo apt-get install rubygems ruby-dev build-essential
 # Install fpm, either
 # sudo gem install fpm
 # or
@@ -31,7 +31,7 @@ mkdir -p build/usr/share/kafka
 mkdir -p build/etc/kafka
 mkdir -p build/var/log/kafka
 
-cp ${origdir}/files/* build/usr/share/kafka
+cp -R ${origdir}/files/* build
 
 tar zxf ${origdir}/${bin_package}
 cd kafka_${scala_version}-${version}
