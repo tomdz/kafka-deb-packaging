@@ -17,7 +17,7 @@ url="https://kafka.apache.org/"
 arch="all"
 section="misc"
 license="Apache Software License 2.0"
-package_version="-1"
+package_version="-2"
 bin_package="kafka_${scala_version}-${version}.tgz"
 download_url="http://mirror.metrocast.net/apache/kafka/${version}/${bin_package}"
 origdir="$(pwd)"
@@ -49,7 +49,7 @@ popd
 
 fpm -t deb \
     -n ${name} \
-    -v ${version}${package_version} \
+    -v ${scala_version}-${version}${package_version} \
     --description "${description}" \
     --url="{$url}" \
     -a ${arch} \
@@ -62,9 +62,9 @@ fpm -t deb \
     --after-remove usr/share/kafka/kafka.postrm \
     -d openjdk-7-jre-headless \
     -d zookeeperd \
-    -m "${USER}@localhost" \
+    -m "$(git config user.email)" \
     --prefix=/ \
     -s dir \
     -- .
-mv kafka*.deb ${origdir}/kafka_${scala_version}-${version}.deb
+mv kafka*.deb ${origdir}/
 popd
