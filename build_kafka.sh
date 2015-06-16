@@ -1,9 +1,11 @@
 #!/bin/bash
-sudo apt-get install rubygems ruby-dev build-essential
-# Install fpm, either
-# sudo gem install fpm
+# Before you run this script, you need to install the following dependencies:
+#  sudo apt-get install rubygems ruby-dev build-essential
+#
+# Then install fpm, either
+#  sudo gem install fpm
 # or
-# gem install --user-install fpm and configure PATH accordingly, see `gem env`
+#  gem install --user-install fpm   and configure PATH accordingly, see `gem env`
 
 set -e
 set -u
