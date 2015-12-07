@@ -1,12 +1,13 @@
 #!/bin/bash
 # 2015-Mar-18 Updated to latest Kafka stable: 0.8.2.1
 # 2015-Mar-20 Added the init.d script and changed to use binary download of scala 2.10, Kafka 0.8.2.1
+# 2015-Dec-07 Upgraded to Kafka 0.8.2.2 distro
 
 set -e
 set -u
 app_user=app
 name=kafka
-version=0.8.2.1
+version=0.8.2.2
 scala_version=2.10
 package_version="-10"
 description="Apache Kafka is a distributed publish-subscribe messaging system."
