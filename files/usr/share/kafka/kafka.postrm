@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+NAME="kafka"
+GROUP=$NAME
+USER=$NAME
+
+# shamelessly copied from debian zookeeper package, where it was shamelessly copied from mysql-server package...
+#
+# - Remove the kafka user only after all his owned files are purged.
+#   
+if [ "$1" = "purge" ]; then
+  rm -rf /var/log/$NAME
+
+  # --remove-all-files takes ages, so delete manually
+  deluser --system $USER || true
+  delgroup --system --only-if-empty $GROUP || true
+fi
+
+#DEBHELPER#

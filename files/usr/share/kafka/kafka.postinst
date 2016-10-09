@@ -1,0 +1,30 @@
+#!/bin/sh
+
+set -e
+
+NAME="kafka"
+GROUP=$NAME
+USER=$NAME
+
+# shamelessly copied from debian zookeeper package, where it was shamelessly copied from mysql-server package...
+if ! getent group $GROUP >/dev/null ; then
+        # Adding system group
+        addgroup --system $GROUP >/dev/null
+fi
+
+# creating kafka user if he isn't already there
+if ! getent passwd $USER >/dev/null ; then
+        # Adding system user
+        adduser \
+          --system \
+          --disabled-login \
+          --ingroup $GROUP \
+          --no-create-home \
+          --gecos "Kafka" \
+          --shell /bin/false \
+          $USER  >/dev/null
+fi
+
+chown $USER:$GROUP /var/log/$NAME
+
+#DEBHELPER#

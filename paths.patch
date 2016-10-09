@@ -1,0 +1,136 @@
+diff --git a/bin/kafka-run-class.sh b/bin/kafka-run-class.sh
+--- a/bin/kafka-run-class.sh
++++ b/bin/kafka-run-class.sh
+@@ -48,75 +48,6 @@
+ 	SCALA_BINARY_VERSION=2.10
+ fi
+ 
+-# run ./gradlew copyDependantLibs to get all dependant jars in a local dir
+-shopt -s nullglob
+-for dir in "$base_dir"/core/build/dependant-libs-${SCALA_VERSION}*;
+-do
+-  if [ -z "$CLASSPATH" ] ; then
+-    CLASSPATH="$dir/*"
+-  else
+-    CLASSPATH="$CLASSPATH:$dir/*"
+-  fi
+-done
+-
+-for file in "$base_dir"/examples/build/libs/kafka-examples*.jar;
+-do
+-  if should_include_file "$file"; then
+-    CLASSPATH="$CLASSPATH":"$file"
+-  fi
+-done
+-
+-for file in "$base_dir"/clients/build/libs/kafka-clients*.jar;
+-do
+-  if should_include_file "$file"; then
+-    CLASSPATH="$CLASSPATH":"$file"
+-  fi
+-done
+-
+-for file in "$base_dir"/streams/build/libs/kafka-streams*.jar;
+-do
+-  if should_include_file "$file"; then
+-    CLASSPATH="$CLASSPATH":"$file"
+-  fi
+-done
+-
+-for file in "$base_dir"/streams/examples/build/libs/kafka-streams-examples*.jar;
+-do
+-  if should_include_file "$file"; then
+-    CLASSPATH="$CLASSPATH":"$file"
+-  fi
+-done
+-
+-for file in "$base_dir"/streams/build/dependant-libs-${SCALA_VERSION}/rocksdb*.jar;
+-do
+-  CLASSPATH="$CLASSPATH":"$file"
+-done
+-
+-for file in "$base_dir"/tools/build/libs/kafka-tools*.jar;
+-do
+-  if should_include_file "$file"; then
+-    CLASSPATH="$CLASSPATH":"$file"
+-  fi
+-done
+-
+-for dir in "$base_dir"/tools/build/dependant-libs-${SCALA_VERSION}*;
+-do
+-  CLASSPATH="$CLASSPATH:$dir/*"
+-done
+-
+-for cc_pkg in "api" "runtime" "file" "json" "tools"
+-do
+-  for file in "$base_dir"/connect/${cc_pkg}/build/libs/connect-${cc_pkg}*.jar;
+-  do
+-    if should_include_file "$file"; then
+-      CLASSPATH="$CLASSPATH":"$file"
+-    fi
+-  done
+-  if [ -d "$base_dir/connect/${cc_pkg}/build/dependant-libs" ] ; then
+-    CLASSPATH="$CLASSPATH:$base_dir/connect/${cc_pkg}/build/dependant-libs/*"
+-  fi
+-done
+-
+ # classpath addition for release
+ for file in "$base_dir"/libs/*;
+ do
+@@ -125,14 +56,6 @@
+   fi
+ done
+ 
+-for file in "$base_dir"/core/build/libs/kafka_${SCALA_BINARY_VERSION}*.jar;
+-do
+-  if should_include_file "$file"; then
+-    CLASSPATH="$CLASSPATH":"$file"
+-  fi
+-done
+-shopt -u nullglob
+-
+ # JMX settings
+ if [ -z "$KAFKA_JMX_OPTS" ]; then
+   KAFKA_JMX_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false "
+@@ -145,13 +68,13 @@
+ 
+ # Log directory to use
+ if [ "x$LOG_DIR" = "x" ]; then
+-    LOG_DIR="$base_dir/logs"
++    LOG_DIR="/var/log/kafka"
+ fi
+ 
+ # Log4j settings
+ if [ -z "$KAFKA_LOG4J_OPTS" ]; then
+   # Log to console. This is a tool.
+-  KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$base_dir/config/tools-log4j.properties"
++  KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:/etc/kafka/tools-log4j.properties"
+ else
+   # create logs directory
+   if [ ! -d "$LOG_DIR" ]; then
+diff --git a/bin/kafka-server-start.sh b/bin/kafka-server-start.sh
+index 1737d0c..dc1b0c0 100755
+--- a/bin/kafka-server-start.sh
++++ b/bin/kafka-server-start.sh
+@@ -22,7 +22,7 @@ fi
+ base_dir=$(dirname $0)
+ 
+ if [ "x$KAFKA_LOG4J_OPTS" = "x" ]; then
+-    export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$base_dir/../config/log4j.properties"
++    export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:/etc/kafka/log4j.properties"
+ fi
+ 
+ if [ "x$KAFKA_HEAP_OPTS" = "x" ]; then
+diff --git a/bin/zookeeper-server-start.sh b/bin/zookeeper-server-start.sh
+index d968786..c02b760 100755
+--- a/bin/zookeeper-server-start.sh
++++ b/bin/zookeeper-server-start.sh
+@@ -22,7 +22,7 @@ fi
+ base_dir=$(dirname $0)
+ 
+ if [ "x$KAFKA_LOG4J_OPTS" = "x" ]; then
+-    export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$base_dir/../config/log4j.properties"
++    export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:/etc/kafka/log4j.properties"
+ fi
+ 
+ if [ "x$KAFKA_HEAP_OPTS" = "x" ]; then
