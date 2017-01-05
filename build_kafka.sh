@@ -11,7 +11,7 @@ section="misc"
 license="Apache Software License 2.0"
 package_version="-1"
 src_package="kafka_${scala_version}-${version}.tgz"
-download_url="http://mirror.atlanta.delimiter.com/pub/apache/kafka/${version}/${src_package}"
+download_url="http://mirror.cc.columbia.edu/pub/software/apache/kafka/${version}/${src_package}"
 origdir="$(pwd)"
 
 #_ MAIN _#
