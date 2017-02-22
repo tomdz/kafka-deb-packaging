@@ -31,6 +31,7 @@ mkdir -p build/var/log/kafka
 
 cp ${origdir}/kafka-broker.default build/etc/default/kafka-broker
 cp ${origdir}/kafka-broker.upstart.conf build/etc/init/kafka-broker.conf
+cp ${origdir}/kafka-broker.postinst build/kafka-broker.postinst
 
 tar zxf ${origdir}/${src_package}
 cd kafka-${version}-src
@@ -49,6 +50,7 @@ fpm -t deb \
     --category ${section} \
     --vendor "" \
     --license "${license}" \
+    --after-install ./kafka-broker.postinst \
     -m "${USER}@localhost" \
     --prefix=/ \
     -s dir \
